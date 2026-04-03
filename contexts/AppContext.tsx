@@ -161,8 +161,12 @@ export const AppProvider: React.FC<AppProviderProps> = ({ children }) => {
         try {
             const user = await api.register(name, email, pass);
             if (user) {
-                showNotification('Conta criada com sucesso! Faça o login para continuar.', 'success');
-                navigate('login');
+                // Automatically log in after registration
+                const loggedInUser = await login(email, pass);
+                if (loggedInUser) {
+                    showNotification(`Bem-vindo, ${name.split(' ')[0]}! Sua conta foi criada com sucesso.`, 'success');
+                }
+                return loggedInUser;
             }
             return user;
         } finally {
