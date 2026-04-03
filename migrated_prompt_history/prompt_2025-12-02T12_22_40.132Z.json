@@ -1,0 +1,246 @@
+[
+  {
+    "id": 0,
+    "author": "user",
+    "payload": {
+      "type": "text",
+      "text": "Actualiza a plataforma deve permitir ao usuario cadstrar o seu negocio e os visitantes podem buscar, observar, e agendar um servico. Os negios estao dividos em categorias, saude, tecnologia, comercio, entretenimento. Altera o nome da app para \"PSMZ\". para alem de cadstro e gerenciamento de somente farmacias, expanda para mais areas e em navbar bar adicine as demais categorias. Todas as categorias terao amesma estrutura da farmacia. ",
+      "cMarkNode": {}
+    },
+    "createdTimestamp": 1764675611980
+  },
+  {
+    "id": 1,
+    "author": "model",
+    "payload": {
+      "type": "thinking",
+      "text": "**Analyzing the Scope Shift**\n\nI'm currently dissecting the implications of broadening the scope. The initial focus on pharmacies is now a crucial piece of a bigger puzzle, which is a multi-service directory. I'm prioritizing understanding how the core architecture will need to shift to accommodate the new requirements. The challenge now is building a flexible framework.\n\n\n**Generalizing Data Structures**\n\nI'm making headway on the data model transformation. The `Pharmacy` type is being successfully generalized into a `Business` type, and I've added a `category` field. I'm also working on generalizing the `Drug` type to something broader like `ProductService`. The introduction of an `Appointment` type to handle service scheduling is going to be pivotal. UI updates are in progress, renaming the app and updating the navbar to accommodate new categories.\n\n\n**Adapting to Broader Scope**\n\nI'm making progress on the broader scope implementation. I've updated variable names like `pharmacies` to `businesses` and expanded seed data to encompass multiple business categories. My focus is now on implementing filtering by category and integrating the mocked scheduling logic. The app's global context is also being updated to support diverse business owner roles and category selection in the UI. I've modified the header to include a category selection and am working on generalizing component pages to reflect the expanded scope.\n\n\n**Generalizing Component Pages**\n\nI'm now in the process of adapting the core UI components for the expanded scope. This involves generalizing several pages and components to accommodate different business types beyond pharmacies. Specifically, I'm working to generalize `DashboardPage` to support creating and managing any business type with an item and also add appointment features. I am also planning on renaming the `PostCard` to use more generic descriptions and modifying the `Footer` to update branding elements.\n\n\n**Defining Core Data Structures**\n\nI'm currently finalizing the data model for the expanded application. I'm focusing on the conversion of the `Pharmacy` type to a more generic `Business` type, and the transformation of `Drug` into a `CatalogItem`. I've also implemented the `Appointment` interface to enable service scheduling. I'm taking a pragmatic approach to the renaming, balancing clarity with the need to avoid breaking the existing logic in places. The goal is to establish a robust foundation for the broadened application.\n\n\n**Refactoring API endpoints**\n\nI'm currently updating the `services/api.ts` file to accommodate the broadened scope. I've updated the seed data with businesses like a Tech Shop and a Cinema, which confirms the flexibility of the `Business` type. I'm also adding `createAppointment` and `getAppointmentsByBusinessId` functions to support the scheduling functionality I'm trying to implement. I'm going to update the title of the header to \"PSMZ\" and include category filters to allow for easy navigation.\n\n\n**Adapting UI for new elements**\n\nI'm now in the process of adapting the UI for the newly added appointment and category features. I'm focusing on the \"Agendar\" button and modal on the profile pages, making sure the user flow feels seamless. I'm also preparing to update the app text to show the correct business/item names. The goal is to enhance the user experience by providing clear and functional interfaces for scheduling and category selection.\n\n\n**Adjusting the \"Agendar\" Experience**\n\nMy focus is on the \"Agendar\" button and its modal. I'm preparing to update the user experience to feel more generic and less pharmacy-specific. I will also make sure the app names and data are updated correctly and that all icons are appropriate to the new function. I must include the category selection in the \"Create Business\" form.\n\n\n**Genericizing Component Content**\n\nI'm now in the process of making the content in `PostCard.tsx` more generic, adapting it to the broader scope. I'm also reviewing `App.tsx` to align props and names within the context provider. My focus is on ensuring a consistent and flexible UI that avoids pharmacy-specific language, despite the existing file names. Additionally, I plan on adding a calendar icon for scheduling purposes to enhance the user interface.\n\n\n",
+      "cMarkNode": {}
+    },
+    "createdTimestamp": 1764675611980,
+    "doneTimestamp": 1764675697116
+  },
+  {
+    "id": 2,
+    "author": "model",
+    "payload": {
+      "type": "text",
+      "text": "To transform \"Farmácia Finder\" into \"PSMZ\", a multi-service platform with scheduling capabilities, I will update the application structure to handle generic \"Businesses\" (Negócios) instead of just pharmacies. This includes adding categories (Health, Tech, Commerce, Entertainment), an appointment system, and updating the branding.\n\nHere are the changes:\n\n1.  **`types.ts`**: Generalized `Pharmacy` to `Business`, `Drug` to `CatalogItem`, and added `Appointment` interface.\n2.  **`services/api.ts`**: Updated mock data to include different business categories and added appointment methods.\n3.  **`components/common/icons.tsx`**: Added a Calendar icon for scheduling.\n4.  **`contexts/AppContext.tsx`**: Updated variable names and logic for generic businesses.\n5.  **`components/Header.tsx`**: Updated branding to \"PSMZ\" and added category navigation.\n6.  **`components/Footer.tsx`**: Updated branding.\n7.  **`components/HomePage.tsx`**: Added category filtering logic.\n8.  **`components/DashboardPage.tsx`**: Added category selection during registration, generalized inventory management, and added an \"Appointments\" (Agendamentos) tab.\n9.  **`components/PharmacyProfilePage.tsx`**: Renamed internally to `BusinessProfilePage`, added the \"Schedule Service\" (Agendar) modal.\n10. **`components/PharmacyCatalogPage.tsx`**: Renamed internally to `BusinessCatalogPage` and generalized item display.\n11. **`components/PostCard.tsx`**: Generalized text.\n12. **`metadata.json`**: Updated app name.\n\n",
+      "cMarkNode": {}
+    },
+    "createdTimestamp": 1764675697116,
+    "doneTimestamp": 1764675697116
+  },
+  {
+    "id": 3,
+    "author": "model",
+    "payload": {
+      "type": "generationTable",
+      "entries": [
+        {
+          "path": "metadata.json",
+          "generationType": 1,
+          "isDone": true,
+          "description": "Update app name and description to PSMZ."
+        },
+        {
+          "path": "types.ts",
+          "generationType": 1,
+          "isDone": true,
+          "description": "Generalize types from Pharmacy to Business and Drug to CatalogItem. Add Appointment type."
+        },
+        {
+          "path": "services/api.ts",
+          "generationType": 1,
+          "isDone": true,
+          "description": "Refactor API to use Business, CatalogItem, and support Appointments. Add varied seed data."
+        },
+        {
+          "path": "contexts/AppContext.tsx",
+          "generationType": 1,
+          "isDone": true,
+          "description": "Update AppContext to handle generic business properties."
+        },
+        {
+          "path": "components/common/icons.tsx",
+          "generationType": 1,
+          "isDone": true,
+          "description": "Add CalendarIcon for scheduling."
+        },
+        {
+          "path": "components/Header.tsx",
+          "generationType": 1,
+          "isDone": true,
+          "description": "Update Header to PSMZ and add category navigation."
+        },
+        {
+          "path": "components/Footer.tsx",
+          "generationType": 1,
+          "isDone": true,
+          "description": "Update Footer to PSMZ."
+        },
+        {
+          "path": "components/HomePage.tsx",
+          "generationType": 1,
+          "isDone": true,
+          "description": "Update HomePage to support category filtering."
+        },
+        {
+          "path": "components/PostCard.tsx",
+          "generationType": 1,
+          "isDone": true,
+          "description": "Generalize PostCard for generic business."
+        },
+        {
+          "path": "components/DashboardPage.tsx",
+          "generationType": 1,
+          "isDone": true,
+          "description": "Generalize dashboard for all business categories, include category selection in creation form, and add Appointments tab."
+        },
+        {
+          "path": "components/PharmacyProfilePage.tsx",
+          "generationType": 1,
+          "isDone": true,
+          "description": "Refactor to generic Business Profile with Appointment Modal."
+        },
+        {
+          "path": "components/PharmacyCatalogPage.tsx",
+          "generationType": 1,
+          "isDone": true,
+          "description": "Refactor to generic Business Catalog."
+        }
+      ]
+    },
+    "createdTimestamp": 1764675700361,
+    "doneTimestamp": 1764675701601
+  },
+  {
+    "id": 4,
+    "author": "model",
+    "payload": {
+      "type": "fixingErrors",
+      "diagnostics": [
+        {
+          "Xya": "utils/reportGenerator.ts",
+          "message": "Module '\"../types\"' has no exported member 'Drug'.",
+          "line": 3,
+          "column": 10
+        },
+        {
+          "Xya": "utils/reportGenerator.ts",
+          "message": "Module '\"../types\"' has no exported member 'Pharmacy'.",
+          "line": 3,
+          "column": 16
+        }
+      ]
+    },
+    "createdTimestamp": 1764675984480,
+    "doneTimestamp": 1764676030033
+  },
+  {
+    "id": 5,
+    "author": "model",
+    "payload": {
+      "type": "thinking",
+      "text": "**Inspecting Type Definitions**\n\nOkay, I've got a handle on the task. I'm focusing on those pesky type errors in `reportGenerator.ts`. It seems `Drug` and `Pharmacy` are missing exports. So, I'm diving into `types.ts` to see what's actually declared there. My next step is to get `reportGenerator.ts` using the correct type definitions.\n\n\n**Clarifying Type Aliases**\n\nI've discovered that `Business` in `types.ts` is the intended equivalent of `Pharmacy`, and `CatalogItem` maps to `Drug`. It looks like I need to update the `reportGenerator.ts` to use `Business` where it was using `Pharmacy`, and `CatalogItem` instead of `Drug`. I've double checked `reportGenerator.ts`, and confirmed I have a list of usages to address. I'm getting ready to implement the changes.\n\n\n**Adjusting Data Structures**\n\nNow I'm reworking the report generator to fit the type updates. I've switched to using `CatalogItem` and `Business` and adjusted the code to use `tags` instead of `relatedDiseases`. I also updated the function signature to accept these new data structures. Next, I'll review all the usages and make sure the data is being passed in the correct format. It looks clean so far.\n\n\n**Reviewing Code Changes**\n\nOkay, I'm taking a close look at `utils/reportGenerator.ts` again. It's looking pretty good, but I'm going to carefully review the changes for any missed opportunities. I'm especially focusing on the new data structures and making sure the data flows correctly through the report generation process. I need to ensure that the `generateStockReportPDF` function now accepts and correctly uses the `Business` and `CatalogItem` types.\n\n\n**Implementing UI Updates**\n\nI'm now focusing on adapting the report generation to reflect the branding update.  I've updated the title and date display.  The stock report now uses \"PSMZ\" and the branding update is fully implemented.  I'm also making sure the data display is consistent with the latest version.\n\n\n**Integrating PDF Enhancements**\n\nI'm now integrating PDF refinements into `utils/reportGenerator.ts`. I've added a header, and now I'm incorporating the body and styling. I'm focusing on aligning columns and setting the header color. My next task is to calculate and display the total stock value in the footer, formatted according to the business's country. I'll then finalize by saving the PDF with a standardized filename. I'm double-checking the call site to ensure the function is properly invoked.\n\n\n**Resolving Import Errors**\n\nI'm now zeroing in on the source of the import issues.  After examining `DashboardPage.tsx`, I confirmed that `utils/reportGenerator.ts` isn't called there, although it might have been missed in the provided files. However, it still has to be correct, and with those updates, the errors should be gone. Now, I'm concentrating on the import statements. I'll make the proposed substitutions, ensuring the file compiles without errors. Then, I'll update the function's internals for `CatalogItem` and `Business` usage, adjusting the property usage from `relatedDiseases` to `tags`. I think I've addressed the root causes of all the errors now.\n\n\n**Implementing Property Changes**\n\nI'm now implementing the update in `utils/reportGenerator.ts` to replace `drug.relatedDiseases` with `item.tags` to correctly reflect the updated data structure. I'm also changing the branding string from \"Farmácia Finder\" to \"PSMZ\". It seems these quick fixes resolve the remaining issues. I'll test the final output to make sure it looks correct and then consider the work complete.\n\n\n**Adding Visual Branding**\n\nI'm now adding a visual element to the report. I've centered a brand cross icon with the text \"PSMZ\". I've set the font size and color to match the style guide. I've also updated the title to reflect the brand name. The date and business name follow, with adjustments for readability.\n\n\n**Finishing PDF Styling**\n\nI'm finishing the PDF styling. I've calculated and displayed the total stock value in the footer, formatted according to the business's country, and standardized the filename for saving. After a double-check, I'm confident the function is properly invoked.\n\n\n**Validating Property Access**\n\nI'm now methodically verifying the property access within the report generation logic. I've double-checked that `business.name`, `business.country`, `item.name`, `item.tags`, `item.quantity`, and `item.price` are all properly accessed within their respective data structures, as defined in `types.ts`. I also verified all import statements are correct, and all the required exports exist. I'm now testing the output for accurate rendering.\n\n\n**Verifying Property Access**\n\nI'm systematically verifying property access within `utils/reportGenerator.ts` to ensure data integrity after the structural and branding updates. I've confirmed that `business.name`, `business.country`, `item.name`, `item.tags`, `item.quantity`, and `item.price` are correctly accessed, and the import statements are correct. I'm now testing the PDF output for accurate rendering and content presentation, making sure the report displays as expected.\n\n\n**Refining Data Integrity**\n\nI'm now methodically verifying property access within the report generation logic. I've double-checked that `business.name`, `business.country`, `item.name`, `item.tags`, `item.quantity`, and `item.price` are all properly accessed within their respective data structures, as defined in `types.ts`. I also verified all import statements are correct, and all the required exports exist. I'm now testing the output for accurate rendering.\n\n\n**Adjusting PDF Layout**\n\nI'm now adjusting the PDF layout to incorporate the new visual branding. I added the \"PSMZ\" text and centered it, ensuring the font size and color are correct. The title now includes the business name and uses the current date. I'm focusing on aligning the table columns for better readability and making the total stock value appear in the footer.\n\n\n**Enhancing PDF Presentation**\n\nI'm now focusing on refining the PDF's presentation, specifically the table and footer. I've successfully applied green styling to the table headers. Additionally, I've integrated the `formatPrice` function for correct currency formatting. I'm focusing on getting the total stock value in the footer to display the correct value. The report saves with a standardized filename now too.\n\n\n**Addressing Total Value**\n\nI'm now focusing on calculating and displaying the total stock value. I've successfully implemented currency formatting using the business's country, and incorporated the `formatPrice` function. The total now appears correctly in the footer of the PDF. Finally, I've standardized the generated filename for consistency. I believe the core functionality is now complete.\n\n\n",
+      "cMarkNode": {}
+    },
+    "createdTimestamp": 1764675991123,
+    "doneTimestamp": 1764676030033
+  },
+  {
+    "id": 6,
+    "author": "model",
+    "payload": {
+      "type": "text",
+      "text": "<!-- Fixes errors in utils/reportGenerator.ts by replacing missing Pharmacy and Drug types with Business and CatalogItem, and updating property usage accordingly. -->\n",
+      "cMarkNode": {}
+    },
+    "createdTimestamp": 1764676030033,
+    "doneTimestamp": 1764676030093
+  },
+  {
+    "id": 7,
+    "author": "model",
+    "payload": {
+      "type": "generationTable",
+      "entries": [
+        {
+          "path": "utils/reportGenerator.ts",
+          "generationType": 2,
+          "isDone": true,
+          "description": "Update types to use Business and CatalogItem instead of Pharmacy and Drug; update property access for tags."
+        }
+      ]
+    },
+    "createdTimestamp": 1764676030094,
+    "doneTimestamp": 1764676037897
+  },
+  {
+    "id": 9,
+    "author": "user",
+    "payload": {
+      "type": "text",
+      "text": "Quando clico no perfil do negocio na abre nada, deve mostrar como mostrava quando era so farmacia\n",
+      "cMarkNode": {}
+    },
+    "createdTimestamp": 1764677997235
+  },
+  {
+    "id": 10,
+    "author": "model",
+    "payload": {
+      "type": "thinking",
+      "text": "**Examining the Navigation Bug**\n\nI've been looking at the bug where clicking a business profile doesn't do anything. My initial thought is that the user is talking about navigating to `businessProfile`. I'm starting by examining `components/Header.tsx` to see if the issue is in the click handler or navigation logic there.\n\n\n**Investigating Navigation Logic**\n\nI've moved on to examining the `PostCard` component. The `handleProfileClick` function seems like a likely culprit. I'm checking how it interacts with the `navigate` function, and how the `businessId` is passed and handled. I'm also now looking at `App.tsx` to ensure `businessProfile` is properly registered as a route.\n\n\n**Identifying the Root Cause**\n\nI've pinpointed the discrepancy: the `navigate` function is using `businessProfile`, while the `switch` statement in `App.tsx` expects `pharmacyProfile`. This explains the blank page! The `ViewState` in `types.ts` correctly defines `businessProfile`, yet the route handling doesn't match. My next move is to revise the `App.tsx` routing to include a case for `businessProfile`. I'll also double-check the `Pharmacy` components for any related issues.\n\n\n**Assessing Route Consistency**\n\nI'm now revisiting `App.tsx` and the `PharmacyProfilePage.tsx` file name. I realize that while I've been updating navigation to use `businessProfile`, the actual routing in `App.tsx` is still stuck on `pharmacyProfile`. This might be confusing the app. I need to make sure the file name is accurate and routes match the type definitions. I also suspect there's a need to handle the renaming correctly within the UI to avoid broken links.\n\n\n**Addressing Routing Discrepancy**\n\nI've confirmed that `App.tsx` requires an update to align the routing with the `ViewState` and navigation calls. The component `PharmacyProfilePage.tsx` uses `businessId` internally (even though it's still named `pharmacyId` for compatibility), which suggests the need for `businessProfile` in the routing, and I need to add that logic to the routing within `App.tsx`. I'll also confirm that no component other than `PharmacyProfilePage` relies on this now. I'll also double check the `handleProfileClick` uses `businessProfile` when navigating, to ensure consistency.\n\n\n**Refining Parameter Passing**\n\nI'm now focusing on how the `businessId` is passed and handled in the `PharmacyProfilePage`. I noticed the component expects `pharmacyId`, which is causing the mismatch. I'm considering updating `PharmacyProfilePage` to accept `businessId` directly. I'll need to update all calls to align with this change. However, for immediate fix, I can pass `currentView.props.businessId` to the `pharmacyId` prop in `App.tsx`'s routing to make sure the view is still working. Ultimately, though, I'd prefer a more direct parameter name to improve code clarity.\n\n\n**Extending Application Scope**\n\nI'm now integrating the user's feedback to broaden the app's scope, including additional business categories: healthcare, technology, commerce, and entertainment. My focus is on ensuring these new categories seamlessly integrate with the existing pharmacy structure, maintaining a consistent user experience. I'm also planning the renaming to \"PSMZ\" and the updates to the navigation bar. I need to make sure the app lets users register their business and that visitors can browse, view, and schedule services.\n\n\n**Fixing the Business Profile Link**\n\nI'm now focusing on fixing the business profile link. The user says when they click the business profile nothing opens and I need to make the link work like it did when the app was only for pharmacies. I'm updating `App.tsx` and `PharmacyProfilePage.tsx` to ensure the navigation works. I will update the routing in `App.tsx` to handle `businessProfile` correctly and I will ensure that the prop `businessId` gets passed from the `PostCard` to the `PharmacyProfilePage`.\n\n\n**Reconciling Parameter Naming**\n\nI'm now focusing on a more granular refactor. I'm updating `PharmacyCatalogPage` and `PharmacyProfilePage` to consistently use the `business` prop, reflecting the broader application scope and streamlining data handling. I've updated the call in `PharmacyProfilePage` to match the prop name change, and I'll make sure all internal references are also consistent. I'm also preparing the updates for `App.tsx`'s routing to ensure seamless navigation between business profiles and the catalog, aligning it with the updated prop and route names.\n\n\n**Aligning Route & Props**\n\nI'm now focusing on a more granular refactor, making the app more consistent. I've been examining `PharmacyProfilePage` and `PharmacyCatalogPage`, and the inconsistency of props is clear: `PharmacyProfilePage` expects a `businessId`, but the data available is a full `business` object. I am working on updating the component and routing within `App.tsx` to handle a `business` object consistently across. I need to ensure that the route is properly defined within `App.tsx` to align with the new model. I'll also be updating the navigation calls to match the new convention. I am currently considering the implications of `business` being a direct prop within the routing.\n\n\n**Updating Components and Routing**\n\nI'm now implementing the latest changes. I've updated the `PharmacyProfilePage` to correctly accept `businessId`, and I adjusted the `renderPage` function to pass this ID to the component. Additionally, I've updated the `PharmacyCatalogPage` to consistently use the `business` prop. Finally, I've updated the `<title>` tag. I'm now reviewing these changes to ensure all references are accurate and consistent with the new structure.\n\n\n**Validating Navigation Links**\n\nI'm now revisiting `components/HomePage.tsx` to ensure its navigation logic aligns with the updated routing. I've confirmed that `PostCard` correctly calls `navigate('businessProfile', { businessId: business.id })`, matching the `App.tsx` routing. Similarly, I'm checking `components/DashboardPage.tsx` and `Header.tsx` to verify the header avatar's click handler also uses the correct navigation format. My focus is on ensuring consistency across all navigation points within the application, particularly those related to `businessProfile`. I'll finalize the changes to `App.tsx`, `PharmacyProfilePage.tsx`, `PharmacyCatalogPage.tsx`, and the `index.html`. I'll make sure the recent component logic like the `AppointmentModal` are retained when changing `PharmacyProfilePage.tsx` to correctly receive the `businessId` in place of the previously named `business` prop.\n\n\n**Standardizing Business Profile Logic**\n\nI'm now consolidating the changes to `App.tsx`, `PharmacyProfilePage`, and `PharmacyCatalogPage`. The routing is updated to use `businessProfile` consistently, and `PharmacyProfilePage` will directly receive `businessId`. In `PharmacyCatalogPage`, the `business` prop will be the key data object. I'm ensuring all calls and imports are aligned. I will try to make this update without breaking changes, and will only change internals of the component while keeping the external interfaces. Finally, the HTML `<title>` will reflect the more general scope of the app.\n\n\n**Executing the Updates**\n\nI'm now implementing the adjustments. I'm updating `App.tsx` to handle the `businessProfile` route and pass the `businessId` to `PharmacyProfilePage`. This involves aligning the routing with the `ViewState` and ensuring the component receives the correct data. I'm also updating `PharmacyProfilePage` to accept `businessId` directly. These changes are designed to streamline navigation and data flow within the application, and the updates will involve a refactoring of the page.\n\n\n",
+      "cMarkNode": {}
+    },
+    "createdTimestamp": 1764677997235,
+    "doneTimestamp": 1764678082921
+  },
+  {
+    "id": 11,
+    "author": "model",
+    "payload": {
+      "type": "text",
+      "text": "To fix the issue where clicking on a business profile does nothing, I need to update the `App.tsx` router to handle the new `businessProfile` route key that was introduced in the previous updates. I will also harmonize the property names across the profile and catalog components to use `businessId` and `business` instead of `pharmacyId` and `pharmacy`.\n\nHere are the changes:\n\n1.  **`App.tsx`**: Update the `renderPage` switch statement to handle `case 'businessProfile'` instead of `'pharmacyProfile'` and pass the correct `businessId` prop.\n2.  **`components/PharmacyProfilePage.tsx`**: Update the component props to accept `businessId` directly. Update the reference to the catalog page to pass `business`.\n3.  **`components/PharmacyCatalogPage.tsx`**: Update the component props to accept `business` instead of `pharmacy`.\n4.  **`index.html`**: Update the page title to \"PSMZ\".\n\n",
+      "cMarkNode": {}
+    },
+    "createdTimestamp": 1764678082921,
+    "doneTimestamp": 1764678082975
+  },
+  {
+    "id": 12,
+    "author": "model",
+    "payload": {
+      "type": "generationTable",
+      "entries": [
+        {
+          "path": "App.tsx",
+          "generationType": 1,
+          "isDone": true,
+          "description": "Update router to handle generic business profile route and props"
+        },
+        {
+          "path": "components/PharmacyProfilePage.tsx",
+          "generationType": 1,
+          "isDone": true,
+          "description": "Update props to use businessId and pass correct prop to catalog"
+        },
+        {
+          "path": "components/PharmacyCatalogPage.tsx",
+          "generationType": 1,
+          "isDone": true,
+          "description": "Update props to use business instead of pharmacy"
+        },
+        {
+          "path": "index.html",
+          "generationType": 1,
+          "isDone": true,
+          "description": "Update page title to PSMZ"
+        }
+      ]
+    },
+    "createdTimestamp": 1764678084130,
+    "doneTimestamp": 1764678087984
+  }
+]

@@ -1,0 +1,181 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "User Profile",
+      "description": "User profile information",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "email": { "type": "string" },
+        "profilePicUrl": { "type": "string" }
+      },
+      "required": ["id", "name", "email"]
+    },
+    "Business": {
+      "title": "Business",
+      "description": "Business information",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "category": { "type": "string" },
+        "profilePicUrl": { "type": "string" },
+        "coverImageUrl": { "type": "string" },
+        "country": { "type": "string" },
+        "province": { "type": "string" },
+        "city": { "type": "string" },
+        "neighborhood": { "type": "string" },
+        "ownerId": { "type": "string" },
+        "openingHours": { "type": "string" },
+        "openDays": { "type": "string" },
+        "contact": { "type": "string" },
+        "description": { "type": "string" }
+      },
+      "required": ["id", "name", "category", "ownerId"]
+    },
+    "Post": {
+      "title": "Post",
+      "description": "Business post",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "businessId": { "type": "string" },
+        "imageUrls": { "type": "array", "items": { "type": "string" } },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "businessId", "title", "createdAt"]
+    },
+    "CatalogItem": {
+      "title": "Catalog Item",
+      "description": "Product or service in a business catalog",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "businessId": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "imageUrls": { "type": "array", "items": { "type": "string" } },
+        "tags": { "type": "array", "items": { "type": "string" } },
+        "quantity": { "type": "number" },
+        "price": { "type": "number" }
+      },
+      "required": ["id", "businessId", "name", "price"]
+    },
+    "StockMovement": {
+      "title": "Stock Movement",
+      "description": "Inventory movement record",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "itemId": { "type": "string" },
+        "businessId": { "type": "string" },
+        "type": { "type": "string", "enum": ["entrada", "saida"] },
+        "quantity": { "type": "number" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["id", "itemId", "businessId", "type", "quantity", "createdAt"]
+    },
+    "Appointment": {
+      "title": "Appointment",
+      "description": "Service appointment",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "businessId": { "type": "string" },
+        "userId": { "type": "string" },
+        "customerName": { "type": "string" },
+        "customerContact": { "type": "string" },
+        "serviceName": { "type": "string" },
+        "date": { "type": "string" },
+        "time": { "type": "string" },
+        "status": { "type": "string", "enum": ["pendente", "confirmado", "cancelado", "concluido"] }
+      },
+      "required": ["id", "businessId", "userId", "customerName", "date", "time", "status"]
+    },
+    "Message": {
+      "title": "Message",
+      "description": "Chat message",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "businessId": { "type": "string" },
+        "userId": { "type": "string" },
+        "senderType": { "type": "string", "enum": ["user", "business"] },
+        "content": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "isRead": { "type": "boolean" }
+      },
+      "required": ["id", "businessId", "userId", "senderType", "content", "createdAt"]
+    },
+    "Favorite": {
+      "title": "Favorite",
+      "description": "User favorite post or item",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "userId": { "type": "string" },
+        "type": { "type": "string", "enum": ["post", "item"] },
+        "targetId": { "type": "string" }
+      },
+      "required": ["id", "userId", "type", "targetId"]
+    },
+    "Comment": {
+      "title": "Comment",
+      "description": "User comment on a post",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "postId": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "userProfilePicUrl": { "type": "string" },
+        "content": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "parentCommentId": { "type": "string" },
+        "isBusinessReply": { "type": "boolean" }
+      },
+      "required": ["id", "postId", "userId", "content", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/profiles/{userId}": {
+      "schema": "UserProfile",
+      "description": "User profile collection"
+    },
+    "/businesses/{businessId}": {
+      "schema": "Business",
+      "description": "Business collection"
+    },
+    "/posts/{postId}": {
+      "schema": "Post",
+      "description": "Post collection"
+    },
+    "/items/{itemId}": {
+      "schema": "CatalogItem",
+      "description": "Catalog item collection"
+    },
+    "/stock_movements/{movementId}": {
+      "schema": "StockMovement",
+      "description": "Stock movement collection"
+    },
+    "/appointments/{appointmentId}": {
+      "schema": "Appointment",
+      "description": "Appointment collection"
+    },
+    "/messages/{messageId}": {
+      "schema": "Message",
+      "description": "Chat message collection"
+    },
+    "/favorites/{favoriteId}": {
+      "schema": "Favorite",
+      "description": "Favorite collection"
+    },
+    "/comments/{commentId}": {
+      "schema": "Comment",
+      "description": "Comment collection"
+    }
+  }
+}

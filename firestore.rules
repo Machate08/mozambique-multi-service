@@ -1,0 +1,249 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ===============================================================
+    // Assumed Data Model
+    // ===============================================================
+    //
+    // Collection: profiles
+    // Fields: id, name, email, profilePicUrl
+    //
+    // Collection: businesses
+    // Fields: id, name, category, profilePicUrl, coverImageUrl, country, province, city, neighborhood, ownerId, openingHours, openDays, contact, description
+    //
+    // Collection: posts
+    // Fields: id, businessId, imageUrls, title, description, createdAt
+    //
+    // Collection: items
+    // Fields: id, businessId, name, description, imageUrls, tags, quantity, price
+    //
+    // Collection: stock_movements
+    // Fields: id, itemId, businessId, type, quantity, createdAt
+    //
+    // Collection: appointments
+    // Fields: id, businessId, userId, customerName, customerContact, serviceName, date, time, status
+    //
+    // Collection: messages
+    // Fields: id, businessId, userId, senderType, content, createdAt, isRead
+    //
+    // Collection: favorites
+    // Fields: id, userId, type, targetId
+    //
+    // Collection: comments
+    // Fields: id, postId, userId, userName, content, createdAt
+    //
+    // ===============================================================
+
+    // ===============================================================
+    // Helper Functions
+    // ===============================================================
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isAuthenticated() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isAuthenticated() &&
+        ((exists(/databases/$(database)/documents/profiles/$(request.auth.uid)) && 
+          get(/databases/$(database)/documents/profiles/$(request.auth.uid)).data.role == 'admin') ||
+          (request.auth.token.email == "josemfmacombe@gmail.com" && request.auth.token.email_verified == true));
+    }
+
+    function isValidEmail(email) {
+      return email is string && email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$");
+    }
+
+    function isValidUrl(url) {
+      return url is string && (url.matches("^https://.*") || url.matches("^http://.*") || url.matches("^data:.*") || url == "");
+    }
+
+    function hasOnlyAllowedFields(allowedFields) {
+      return request.resource.data.keys().hasOnly(allowedFields);
+    }
+
+    function isValidString(field, min, max) {
+      return request.resource.data[field] is string && 
+             request.resource.data[field].size() >= min && 
+             request.resource.data[field].size() <= max;
+    }
+
+    function isValidOptionalString(field, min, max) {
+      return !(field in request.resource.data) || 
+             (request.resource.data[field] is string && 
+              request.resource.data[field].size() >= min && 
+              request.resource.data[field].size() <= max);
+    }
+
+    // ===============================================================
+    // Domain Validators
+    // ===============================================================
+
+    function isValidProfile(data) {
+      return hasOnlyAllowedFields(['id', 'name', 'email', 'profilePicUrl', 'role']) &&
+        data.id is string && isValidString('name', 1, 100) &&
+        isValidEmail(data.email) &&
+        isValidOptionalString('profilePicUrl', 0, 1000000) &&
+        (!('profilePicUrl' in data) || data.profilePicUrl == null || data.profilePicUrl == "" || isValidUrl(data.profilePicUrl));
+    }
+
+    function isValidBusiness(data) {
+      return hasOnlyAllowedFields(['id', 'name', 'category', 'profilePicUrl', 'coverImageUrl', 'country', 'province', 'city', 'neighborhood', 'ownerId', 'openingHours', 'openDays', 'contact', 'description', 'createdAt']) &&
+        data.id is string && isValidString('name', 1, 100) &&
+        isValidString('category', 1, 50) &&
+        isValidOptionalString('profilePicUrl', 0, 1000000) &&
+        isValidOptionalString('coverImageUrl', 0, 1000000) &&
+        isValidOptionalString('country', 0, 100) &&
+        isValidOptionalString('province', 0, 100) &&
+        isValidOptionalString('city', 0, 100) &&
+        isValidOptionalString('neighborhood', 0, 100) &&
+        data.ownerId is string &&
+        isValidOptionalString('openingHours', 0, 200) &&
+        isValidOptionalString('openDays', 0, 200) &&
+        isValidOptionalString('contact', 0, 200) &&
+        isValidOptionalString('description', 0, 2000);
+    }
+
+    function isValidPost(data) {
+      return hasOnlyAllowedFields(['id', 'businessId', 'imageUrls', 'title', 'description', 'createdAt', 'likesCount', 'commentsCount']) &&
+        data.id is string && data.businessId is string && 
+        isValidString('title', 1, 200) &&
+        isValidOptionalString('description', 0, 5000) &&
+        data.createdAt is string &&
+        (data.imageUrls is list && data.imageUrls.size() <= 5);
+    }
+
+    function isValidItem(data) {
+      return hasOnlyAllowedFields(['id', 'businessId', 'name', 'description', 'imageUrls', 'tags', 'quantity', 'price', 'likesCount']) &&
+        data.id is string && data.businessId is string && 
+        isValidString('name', 1, 200) &&
+        isValidOptionalString('description', 0, 2000) &&
+        data.price is number && data.price >= 0 &&
+        (data.imageUrls is list && data.imageUrls.size() <= 5);
+    }
+
+    function isValidAppointment(data) {
+      return hasOnlyAllowedFields(['id', 'businessId', 'userId', 'customerName', 'customerContact', 'serviceName', 'date', 'time', 'status']) &&
+        data.id is string && data.businessId is string && data.userId is string &&
+        isValidString('customerName', 1, 100) &&
+        isValidOptionalString('customerContact', 0, 100) &&
+        isValidOptionalString('serviceName', 0, 100) &&
+        isValidString('date', 1, 20) &&
+        isValidString('time', 1, 20) &&
+        data.status in ['pendente', 'confirmado', 'cancelado', 'concluido'];
+    }
+
+    function isValidMessage(data) {
+      return hasOnlyAllowedFields(['id', 'businessId', 'userId', 'senderType', 'content', 'createdAt', 'isRead']) &&
+        data.id is string && data.businessId is string && data.userId is string &&
+        data.senderType in ['user', 'business'] && 
+        isValidString('content', 1, 5000) && 
+        data.createdAt is string;
+    }
+
+    function isValidFavorite(data) {
+      return hasOnlyAllowedFields(['id', 'userId', 'type', 'targetId']) &&
+        data.id is string && data.userId is string && data.type in ['post', 'item'] && data.targetId is string;
+    }
+
+    function isValidComment(data) {
+      return hasOnlyAllowedFields(['id', 'postId', 'userId', 'userName', 'userAvatar', 'content', 'createdAt', 'parentCommentId', 'isBusinessReply', 'repliesCount']) &&
+        data.id is string && data.postId is string && data.userId is string && 
+        isValidString('content', 1, 1000) && 
+        data.createdAt is string &&
+        isValidOptionalString('userAvatar', 0, 1000000) &&
+        isValidOptionalString('parentCommentId', 0, 100) &&
+        (data.isBusinessReply == null || data.isBusinessReply is bool);
+    }
+
+    // ===============================================================
+    // Rules
+    // ===============================================================
+
+    match /profiles/{userId} {
+      allow read: if isOwner(userId) || isAdmin();
+      allow create: if isOwner(userId) && isValidProfile(request.resource.data) && request.resource.data.get('role', 'user') == 'user';
+      allow update: if (isOwner(userId) && isValidProfile(request.resource.data) && request.resource.data.get('role', 'user') == resource.data.get('role', 'user')) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    match /businesses/{businessId} {
+      allow read: if true;
+      allow create: if isAuthenticated() && isValidBusiness(request.resource.data) && request.resource.data.ownerId == request.auth.uid;
+      allow update: if isAuthenticated() && isValidBusiness(request.resource.data) && (resource.data.ownerId == request.auth.uid || isAdmin());
+      allow delete: if isAuthenticated() && (resource.data.ownerId == request.auth.uid || isAdmin());
+    }
+
+    match /posts/{postId} {
+      allow read: if true;
+      allow create: if isAuthenticated() && isValidPost(request.resource.data) && 
+        get(/databases/$(database)/documents/businesses/$(request.resource.data.businessId)).data.ownerId == request.auth.uid;
+      allow update: if isAuthenticated() && (
+        (isValidPost(request.resource.data) && (get(/databases/$(database)/documents/businesses/$(resource.data.businessId)).data.ownerId == request.auth.uid || isAdmin())) ||
+        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likesCount', 'commentsCount']))
+      );
+      allow delete: if isAuthenticated() && 
+        (get(/databases/$(database)/documents/businesses/$(resource.data.businessId)).data.ownerId == request.auth.uid || isAdmin());
+    }
+
+    match /items/{itemId} {
+      allow read: if true;
+      allow create: if isAuthenticated() && isValidItem(request.resource.data) && 
+        get(/databases/$(database)/documents/businesses/$(request.resource.data.businessId)).data.ownerId == request.auth.uid;
+      allow update: if isAuthenticated() && (
+        (isValidItem(request.resource.data) && (get(/databases/$(database)/documents/businesses/$(resource.data.businessId)).data.ownerId == request.auth.uid || isAdmin())) ||
+        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likesCount']))
+      );
+      allow delete: if isAuthenticated() && 
+        (get(/databases/$(database)/documents/businesses/$(resource.data.businessId)).data.ownerId == request.auth.uid || isAdmin());
+    }
+
+    match /stock_movements/{movementId} {
+      allow read: if isAuthenticated() && 
+        get(/databases/$(database)/documents/businesses/$(resource.data.businessId)).data.ownerId == request.auth.uid;
+      allow create: if isAuthenticated() && 
+        get(/databases/$(database)/documents/businesses/$(request.resource.data.businessId)).data.ownerId == request.auth.uid;
+      allow update, delete: if isAdmin();
+    }
+
+    match /appointments/{appointmentId} {
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || 
+        get(/databases/$(database)/documents/businesses/$(resource.data.businessId)).data.ownerId == request.auth.uid);
+      allow create: if isAuthenticated() && isValidAppointment(request.resource.data) && request.resource.data.userId == request.auth.uid;
+      allow update: if isAuthenticated() && isValidAppointment(request.resource.data) && 
+        (resource.data.userId == request.auth.uid || get(/databases/$(database)/documents/businesses/$(resource.data.businessId)).data.ownerId == request.auth.uid || isAdmin());
+      allow delete: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+    }
+
+    match /messages/{messageId} {
+      allow read: if isAuthenticated() && (resource.data.userId == request.auth.uid || 
+        get(/databases/$(database)/documents/businesses/$(resource.data.businessId)).data.ownerId == request.auth.uid);
+      allow create: if isAuthenticated() && isValidMessage(request.resource.data) && 
+        (request.resource.data.userId == request.auth.uid || get(/databases/$(database)/documents/businesses/$(request.resource.data.businessId)).data.ownerId == request.auth.uid);
+      allow update: if isAuthenticated() && (resource.data.userId == request.auth.uid || 
+        get(/databases/$(database)/documents/businesses/$(resource.data.businessId)).data.ownerId == request.auth.uid) &&
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['isRead']);
+      allow delete: if isAdmin();
+    }
+
+    match /favorites/{favoriteId} {
+      allow read: if isAuthenticated() && resource.data.userId == request.auth.uid;
+      allow create: if isAuthenticated() && isValidFavorite(request.resource.data) && request.resource.data.userId == request.auth.uid;
+      allow delete: if isAuthenticated() && resource.data.userId == request.auth.uid;
+    }
+
+    match /comments/{commentId} {
+      allow read: if true;
+      allow create: if isAuthenticated() && isValidComment(request.resource.data) && request.resource.data.userId == request.auth.uid;
+      allow update: if isAuthenticated() && (
+        (isValidComment(request.resource.data) && (resource.data.userId == request.auth.uid || isAdmin())) ||
+        (request.resource.data.diff(resource.data).affectedKeys().hasOnly(['repliesCount']))
+      );
+      allow delete: if isAuthenticated() && (resource.data.userId == request.auth.uid || isAdmin());
+    }
+  }
+}

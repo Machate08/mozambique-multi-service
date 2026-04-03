@@ -1,0 +1,5 @@
+{
+  "name": "PSMZ",
+  "description": "A multi-service platform to find local businesses (Health, Tech, Commerce, Entertainment), view their catalogs, and schedule services.",
+  "requestFramePermissions": []
+}
