@@ -143,7 +143,7 @@ const Header: React.FC = () => {
                                     <div className="h-6 w-px bg-slate-200 dark:bg-slate-700 mx-2"></div>
 
                                     <a href="#" onClick={(e) => { e.preventDefault(); currentUser.businessId ? navigate('dashboard') : navigate('settings', { openNewService: true }); }} className="hidden xl:block text-sm font-bold text-primary-600 dark:text-primary-400 hover:underline relative mr-2">
-                                        {currentUser.businessId ? 'Painel' : 'Cadastrar'}
+                                        {currentUser.businessId ? 'Painel' : 'Cadastrar Serviço'}
                                         {currentUser.businessId && unreadCounts.appointments > 0 && (
                                             <span className="absolute -top-2 -right-3 bg-red-500 text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full shadow-sm">{unreadCounts.appointments}</span>
                                         )}
@@ -164,12 +164,20 @@ const Header: React.FC = () => {
                                     </button>
                                 </div>
                             ) : (
-                                <button
-                                    onClick={() => navigate('login')}
-                                    className="bg-primary-600 text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-lg shadow-primary-500/20 hover:bg-primary-700 hover:shadow-primary-500/40 transition-all transform hover:-translate-y-0.5 ml-2"
-                                >
-                                    Entrar
-                                </button>
+                                <div className="flex items-center gap-2">
+                                    <button
+                                        onClick={() => navigate('register')}
+                                        className="text-primary-600 dark:text-primary-400 px-4 py-2 rounded-full text-sm font-bold hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-all"
+                                    >
+                                        Criar Conta
+                                    </button>
+                                    <button
+                                        onClick={() => navigate('login')}
+                                        className="bg-primary-600 text-white px-6 py-2.5 rounded-full text-sm font-bold shadow-lg shadow-primary-500/20 hover:bg-primary-700 hover:shadow-primary-500/40 transition-all transform hover:-translate-y-0.5"
+                                    >
+                                        Entrar
+                                    </button>
+                                </div>
                             )}
                         </div>
                     </div>
@@ -265,7 +273,10 @@ const Header: React.FC = () => {
                                  <button onClick={() => { logout(); setIsMenuOpen(false); }} className="block w-full text-left py-2 text-red-500">Sair</button>
                              </div>
                          ) : (
-                             <button onClick={() => { navigate('login'); setIsMenuOpen(false); }} className="w-full bg-primary-600 text-white py-2 rounded-lg font-semibold">Entrar</button>
+                             <div className="pt-2 border-t border-slate-200 dark:border-slate-800 space-y-2">
+                                 <button onClick={() => { navigate('register'); setIsMenuOpen(false); }} className="w-full text-primary-600 py-2 rounded-lg font-semibold border border-primary-600">Criar Conta</button>
+                                 <button onClick={() => { navigate('login'); setIsMenuOpen(false); }} className="w-full bg-primary-600 text-white py-2 rounded-lg font-semibold">Entrar</button>
+                             </div>
                          )}
                     </div>
                  )}
